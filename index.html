@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,16 +8,27 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body onload="onInit()">
     <div class="header">
-        <button class="btn" data-level= 1 onclick="choseLevel(this)">Rookie</button>
-        <button class="btn" data-level= 2 onclick="choseLevel(this)">Medium</button>
-        <button class="btn" data-level= 3 onclick="choseLevel(this)">Extreme!</button>
-        <span class="center">game on!</span></div>
-<div class="board"></div>
+        <div class="featurs">
+            <h3 class="center">Shula</h3>
+            <div class="restart">
+                <img onclick="restart()" class="smile-img" src="pics/smile1.jpg" alt="">
+                <h3 class="live">live left:</h3>
+            </div>
+            <img class="clock-img" src="pics/clock.jpg">
+            <h3 class="timer"></h3>
+        </div>
+        <button class="btn" data-level=1 onclick="onChosenLevel(this)">Rookie</button>
+        <button class="btn" data-level=2 onclick="onChosenLevel(this)">Medium</button>
+        <button class="btn" data-level=3 onclick="onChosenLevel(this)">Extreme!</button>
+    </div>
+    <div class="modal"></div><div class="board"><span> GAME OVER! </span></div>
 
-
+    <div class="footer"><span>©️ CoffeRights: Tomer Benaim</span></div>
     <script src="js/main.js"></script>
     <script src="js/utils.js"></script>
 </body>
+
 </html>
