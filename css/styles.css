@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    color: bisque;
+    background-color: #b0e749;
+    /* font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+    margin: 0 0;
+}
+
+.header {
+    height: 70px;
+    background: #316019b9;
+    padding-top: 20px;
+    font-size: x-large;
+}
+
+.center {
+
+    margin: 25%;
+}
+
+.board {
+    padding: 30px;
+}
+
+table {
+    text-align: center;
+    margin: 10px auto;
+    width: 500px;
+    height: 400px;
+    color: rgb(17, 94, 25);
+    font-family:fantasy;
+    font-size: large;
+}
+
+.cell {
+    height: 45px;
+    width: 45px;
+
+}
+.hide{
+    background: #000;
+}
+.empty{
+    background-color: #8f7011;
+}
+
+.cell:hover {
+    background: #d5e9aea8;
+    cursor: pointer;
+}
+
+.light {
+    background: #cee96c;
+}
+
+.dark {
+    background-color: #9ed54bb9;
+}
+
+
+.btn {
+    margin-left: 1%;
+    --b: 3px;
+    --s: .45em;
+    --color: #3b5413;
+
+    padding: calc(.2em + var(--s)) calc(.3em + var(--s));
+    color: var(--color);
+    --_p: var(--s);
+    background:
+        conic-gradient(from 90deg at var(--b) var(--b), #0000 90deg, var(--color) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+    transition: .3s linear, color 0s, background-color 0s;
+    outline: var(--b) solid #0000;
+    outline-offset: .6em;
+    font-size: 16px;
+
+    border: 0;
+
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.btn:hover,
+.btn:focus-visible {
+    --_p: 0px;
+    outline-color: var(--color);
+    outline-offset: .05em;
+}
+
+.btn:active {
+    background: var(--color);
+    color: #fff;
+}
