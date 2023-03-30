@@ -23,6 +23,7 @@ var gUserMoves = []
 var gMegaHint = false
 var gMegaSpots = []
 var gMegaCount = 2
+var gBombsExterminated = 0
 function onInit() {
     gBoard = createCleanBoard(2)
     renderEmptyBoard(gBoard)
@@ -76,9 +77,12 @@ function onCellClicked(elCell) {
     var currCell = gBoard[elCellI][elCellJ]
     if (currCell.isFlag) return
     if (currCell.isBomb) {
+        if (!currCell.isHiden) return
         currCell.isHiden = false
         gLives--
         renderBoard(gBoard, '.board')
+        var audioBomb = new Audio('./sounds/bomb.mp3')
+        audioBomb.play()
         document.querySelector('.live').innerText = 'live left: ' + gLives
         if (gLives === 0) gameOver()
     }
@@ -87,7 +91,6 @@ function onCellClicked(elCell) {
         if (currCell.isHiden) gGame.shownCount++
         currCell.isHiden = false
         revealNebs(elCellI, elCellJ, gBoard)
-
     }
     if (currCell.nebsCount >= 1) {
         if (currCell.isHiden) gGame.shownCount++
@@ -111,6 +114,8 @@ function gameOver() {
     gLives = 3
     gGame.isOn = false
     gGameOver = true
+    var audio = new Audio('./sounds/game-over.wav')
+    audio.play()
     document.querySelector('.modal').style.display = 'block'
     document.querySelector('.timer').innerText = `${gGame.timer}`
     document.querySelector('.live').innerText = 'live left: ' + gLives
@@ -140,6 +145,8 @@ function restart() {
     gMegaHint = false
     gMegaSpots = []
     gMegaCount = 2
+    gBombsExterminated = 0
+    document.querySelector('.exterminator').innerText = 'Exterminator 💣'
     document.querySelector('.mega-hint').classList.remove('dark-mode')
     document.querySelector('.hints').classList.remove('dark-mode')
     document.querySelector('.modal').style.display = 'none'
@@ -159,6 +166,8 @@ function checkVictory(board) {
         localStorage.setItem("BestTime", gBestTime)
         document.querySelector('.best').innerText = 'BEST TIME: ' + localStorage.getItem("BestTime")
         clearInterval(gTimeInterval)
+        var audio = new Audio('./sounds/win.wav')
+        audio.play()
     }
 
 
@@ -223,4 +232,18 @@ function onMegaHint() {
 
 }
 
-
+function onBombExterminator(elDiv) {
+    for (var i = 0; i < 500; i++) {
+        if (gBombsExterminated > 3) {
+            elDiv.innerText = 'Exterminator 💥'
+            return
+        }
+        var randCellI = getRandomIntInclusive(0, gBoard.length - 1)
+        var randCellj = getRandomIntInclusive(0, gBoard.length - 1)
+        if (gBoard[randCellI][randCellj].isBomb) {
+            gBoard[randCellI][randCellj].isBomb = false
+            gBombsExterminated++
+            renderBoard(gBoard, '.board')
+        } else onBombExterminator(elDiv)
+    }
+}
