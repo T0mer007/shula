@@ -11,11 +11,14 @@
 
 <body onload="onInit()">
     <div class="header">
+        <div class="sides left best">BEST TIME:</div><div class="sides left safe">SAFE CLICK: </div><div class="sides left undo">UNDO</div>
         <div class="featurs">
+            
             <h3 class="center">Shula</h3>
             <div class="restart">
-                <img onclick="restart()" class="smile-img" src="pics/smile1.jpg" alt="">
-                <h3 class="live">live left:</h3>
+                <img onclick="restart()" class="smile-img" src="pics/smile.jpg" alt="">
+                <h3 class="sides live">live left: 3</h3><h3 class="sides flag"></h3><div class="sides hints"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"></div>
+                <div class="sides bomb">BOMB MODE</div>
             </div>
             <img class="clock-img" src="pics/clock.jpg">
             <h3 class="timer"></h3>

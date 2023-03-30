@@ -101,6 +101,7 @@ table {
 }
 
 .restart {
+    
     margin-left: 50px;
     width: 45px;
     position: absolute;
@@ -134,7 +135,7 @@ table {
 
     position: absolute;
     margin-left: 100px;
-    margin-top: 0px;
+    margin-top: 5px;
     width: 200px;
 }
 
@@ -144,14 +145,6 @@ table {
     text-align: center;
     font-size: x-large;
 
-}
-.live{
-    margin-top: 100px;
-    font-family: fantasy;
-    font-weight: 100;
-    position: absolute;
-    margin-left: 380px;
-    width: 200px;
 }
 .modal{
     width: 200px;
@@ -165,4 +158,59 @@ table {
     opacity: 0.8;
     display: none;
     color: #000;
+}
+
+.sides{
+    
+    font-family: fantasy;
+    font-weight: 100;
+    position: absolute;
+    margin-left: 380px;
+    width: 160px;
+    height: 70px;
+    background: #c7b43790;
+    border-radius: 50%;
+    padding-top: 15px;
+    padding-left: 20px;
+    cursor:default;
+}
+.live {
+    margin-top: 40px;
+    
+}
+
+.flag{
+    padding-left: 33px;
+   margin-top: 120px;
+}
+.hints{
+margin-top: 200px;
+padding: 14px 7px;
+
+
+}
+.bomb{
+    padding-top: 20px;
+    cursor: pointer;
+    margin-top: 280px;
+}
+
+.hint{
+    border-radius: 50%;
+    width: 33px;
+    margin-left: 13px;
+    cursor: pointer;
+}
+.left{
+    margin-left: 100px;
+    
+}
+.best{
+    margin-top: 85px;
+}
+.safe{
+    margin-top: 170px;
+}
+.undo{
+    margin-top: 255px;
 }

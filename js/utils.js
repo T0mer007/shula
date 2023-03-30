@@ -23,36 +23,44 @@ function createCleanBoard(level) {
 }
 
 function createGameBoard(level, elCellI, elCellJ) {
-    var size = 8
+    var size
     var difficulty
+    var bombs
     switch (level) {
         case 1:
             size = 4
-            difficulty = 0.25
+            bombs = 2
+            difficulty = 0.5
             break
         case 2:
             size = 8
-            difficulty = 0.2
+            bombs = 15
+            difficulty = 0.25
             break
         case 3:
             size = 12
-            difficulty = 0.35
+            bombs = 25
+            difficulty = 0.25
     }
     const board = []
     for (var i = 0; i < size; i++) {
         board.push([])
         for (var j = 0; j < size; j++) {
-            if (Math.random() > difficulty) {
-                board[i][j] = { location: { i, j }, char: EMPTY, isBomb: false, isFlag: false, nebsCount: +0, isHiden: true }
-            } else {
-                
+            if (Math.random() < difficulty && bombs > 0) {
                 board[i][j] = { location: { i, j }, char: BOMB, isBomb: true, isFlag: false, nebsCount: +0, isHiden: true }
+                bombs--
+            } else {
+
+                board[i][j] = { location: { i, j }, char: EMPTY, isBomb: false, isFlag: false, nebsCount: +0, isHiden: true }
+                gEmptyCount++
             }
             if (i === elCellI && j === elCellJ) {
                 board[i][j] = { location: { i, j }, char: EMPTY, isBomb: false, isFlag: false, nebsCount: +0, isHiden: true }
+
             }
         }
     }
+
     return board
 }
 
@@ -82,6 +90,7 @@ function renderEmptyBoard(mat) {
     strHTML += '</tbody></table>'
     const elContainer = document.querySelector('.board')
     elContainer.innerHTML = strHTML
+    document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
 }
 
 function renderBoard(mat, selector) {
@@ -92,8 +101,8 @@ function renderBoard(mat, selector) {
             var cell = mat[i][j]
             if (!cell.isHiden && cell.isBomb) cell.char = BOMB
             if (cell.isHiden) {
-                cell.char = ' '
-                cell.char = (cell.isFlag) ? FLAG : ' '
+                cell.char = EMPTY
+                cell.char = (cell.isFlag) ? FLAG : EMPTY
             } else if (cell.nebsCount > 0 && !cell.isBomb) {
                 cell.char = cell.nebsCount
             }
@@ -143,11 +152,16 @@ function revealNebs(cellI, cellJ, mat) {
             if (j < 0 || j >= mat[i].length) continue
             if (!mat[i][j].isBomb) {
                 var currCell = mat[i][j]
-                currCell.isHiden = false
+                if (currCell.isHiden) {
+
+                    currCell.isHiden = false
+                    gGame.shownCount++
+                    console.log('gGame.shownCount++: ', gGame.shownCount)
+                }
                 renderBoard(gBoard, '.board')
                 if (gBoard[i][j].nebsCount === 0) {
-                    console.log('mat[cellI][cellJ]: ', mat[cellI][cellJ])
-                    console.log('currCell.location.i, currCell.location.j: ', currCell.location.i, currCell.location.j)
+                    // console.log('mat[cellI][cellJ]: ', mat[cellI][cellJ])
+                    // console.log('currCell.location.i, currCell.location.j: ', currCell.location.i, currCell.location.j)
                     // revealNebs(currCell.location.i, currCell.location.j, mat)
                 }
             }
@@ -164,4 +178,40 @@ function revealBombs(board) {
         }
     }
     renderBoard(gBoard, '.board')
+}
+
+function revealNebsHint(cellI, cellJ, mat) {
+
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            // if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= mat[i].length) continue
+
+            var currCell = mat[i][j]
+            console.log('mat[i][j]: ', mat[i][j] )
+            if (currCell.isHiden) currCell.isHiden = false
+        }
+    }
+    renderBoard(gBoard, '.board')
+}
+
+
+
+function UnrevealNebs(cellI, cellJ, mat) {
+
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            // if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= mat[i].length) continue
+            var currCell = mat[i][j]
+
+            currCell.isHiden = true
+
+        }
+    }
+    renderBoard(gBoard, '.board')
+
+
 }
