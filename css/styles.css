@@ -37,10 +37,6 @@ table {
     width: 45px;
 }
 
-.hide {
-    background: #000;
-}
-
 .cell:hover {
     background: #d5e9aea8;
     cursor: pointer;
@@ -52,6 +48,9 @@ table {
 
 .dark {
     background-color: #9ed54bb9;
+}
+.is-safe{
+    background:#539bbd95;
 }
 
 .revealed {
@@ -151,13 +150,26 @@ table {
     height: 150px;
     border-radius: 20%;
     background-color: #efecc9;
-    position: fixed;
+    position: absolute;
     z-index: 1;
     margin-top: 70px;
     margin-left:550px ;
     opacity: 0.8;
     display: none;
-    color: #000;
+    font-size: large;
+    color: #3b5413;
+}
+.res-img{
+    width: 50px;
+    border-radius: 50%;
+    position: absolute;
+    margin-top: 10px;
+   margin-left: 80px;
+   cursor: pointer;
+   
+}
+.modal-txt{
+    margin-left: 40px;
 }
 
 .sides{
@@ -209,8 +221,25 @@ padding: 14px 7px;
     margin-top: 85px;
 }
 .safe{
-    margin-top: 170px;
+    margin-top: 163px;
+    cursor: pointer;
+    color: #539bbd95;
 }
 .undo{
-    margin-top: 255px;
+    margin-top: 242px;
+    padding-top: 20px;
+    padding-left: 52px;
+    cursor: pointer;
+}
+
+.dark-mode{
+    background-color: #676b599a;
+}
+.dark-btn{
+    background: #6d8a5f;
+    color: #ccd5ac;
+    cursor: pointer;
+    padding-top: 20px;
+    padding-left: 30px;
+    margin-top: 322px;
 }

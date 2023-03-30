@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Shula</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body onload="onInit()">
     <div class="header">
-        <div class="sides left best">BEST TIME:</div><div class="sides left safe">SAFE CLICK: </div><div class="sides left undo">UNDO</div>
+        <div class="sides left best">BEST TIME:</div><div onclick="onSafeClick(this)" class="sides left safe">SAFE CLICK: </div><div onclick="onUndo" class="sides left undo">UNDO</div><div onclick="onDarkMode()" class="sides left dark-btn">Dark Mode</div>
         <div class="featurs">
             
             <h3 class="center">Shula</h3>
@@ -27,7 +27,7 @@
         <button class="btn" data-level=2 onclick="onChosenLevel(this)">Medium</button>
         <button class="btn" data-level=3 onclick="onChosenLevel(this)">Extreme!</button>
     </div>
-    <div class="modal"></div><div class="board"><span> GAME OVER! </span></div>
+    <div class="modal"><h3 class="modal-txt">TRY AGAIN!</h3><img class="res-img" onclick="restart()" src="pics/restart.png" ></div><div class="board"><span> GAME OVER! </span></div>
 
     <div class="footer"><span>©️ CoffeRights: Tomer Benaim</span></div>
     <script src="js/main.js"></script>

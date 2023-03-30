@@ -91,6 +91,7 @@ function renderEmptyBoard(mat) {
     const elContainer = document.querySelector('.board')
     elContainer.innerHTML = strHTML
     document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
+    document.querySelector('.sides.left.safe').innerText = 'SAFE CLICK: ' + gSafeClicks
 }
 
 function renderBoard(mat, selector) {
@@ -108,6 +109,7 @@ function renderBoard(mat, selector) {
             }
             var className = ((i + j) % 2 === 0) ? 'light' : 'dark'
             if (!cell.isHiden) className += ' revealed '
+            if (cell.isSafe) className += ' is-safe '
             className += ' cell '
             strHTML += `<td data-i=${i} data-j=${j} oncontextmenu="onRightClicked(this);return false;" onclick="onCellClicked(this)" class="${className} ">${cell.char}</td>`
         }
@@ -140,7 +142,6 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-
 function revealNebs(cellI, cellJ, mat) {
 
     if (mat[cellI][cellJ].nebsCount > 0) return
@@ -156,7 +157,6 @@ function revealNebs(cellI, cellJ, mat) {
 
                     currCell.isHiden = false
                     gGame.shownCount++
-                    console.log('gGame.shownCount++: ', gGame.shownCount)
                 }
                 renderBoard(gBoard, '.board')
                 if (gBoard[i][j].nebsCount === 0) {
@@ -169,7 +169,6 @@ function revealNebs(cellI, cellJ, mat) {
     }
     renderBoard(gBoard, '.board')
 }
-
 
 function revealBombs(board) {
     for (var i = 0; i < board.length; i++) {
@@ -185,33 +184,26 @@ function revealNebsHint(cellI, cellJ, mat) {
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= mat.length) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            // if (i === cellI && j === cellJ) continue
             if (j < 0 || j >= mat[i].length) continue
-
             var currCell = mat[i][j]
-            console.log('mat[i][j]: ', mat[i][j] )
             if (currCell.isHiden) currCell.isHiden = false
+            else (currCell.isRevealed = true)
         }
     }
     renderBoard(gBoard, '.board')
 }
-
-
 
 function UnrevealNebs(cellI, cellJ, mat) {
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= mat.length) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            // if (i === cellI && j === cellJ) continue
             if (j < 0 || j >= mat[i].length) continue
             var currCell = mat[i][j]
-
-            currCell.isHiden = true
-
+            if (!currCell.isRevealed) currCell.isHiden = true
         }
     }
     renderBoard(gBoard, '.board')
-
-
 }
+
+

@@ -16,38 +16,34 @@ var gLives = 3
 var gGameOver = false
 var gHintOn = false
 var gBestTime = Infinity
+var gSafeClicks = 3
+var gHintsCount = 3
+const gUserMoves = []
 function onInit() {
     gBoard = createCleanBoard(2)
     renderEmptyBoard(gBoard)
 
-}
 
+}
 
 function onRightClicked(elCell) {
     if (gGame.flagsCount < 1) return
-    console.log('elCell: ', elCell)
     const elCellI = +elCell.dataset.i
     const elCellJ = +elCell.dataset.j
     const currCell = gBoard[elCellI][elCellJ]
-    console.log('currCell: ', currCell)
     if (!currCell.isFlag) gGame.flagsCount--
     else gGame.flagsCount++
     currCell.isFlag = (!currCell.isFlag && currCell.isHiden) ? true : false
     document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
     renderBoard(gBoard, '.board')
-
-
-
 }
-function onCellClicked(elCell) {
+function onCellClicked(elCell, cellI, cellJ) {
     if (gGameOver) return
     const elCellI = +elCell.dataset.i
     const elCellJ = +elCell.dataset.j
     if (gHintOn) {
-        console.log('elCell: ', elCell)
-        console.log(gBoard[elCellI][elCellJ])
         revealNebsHint(elCellI, elCellJ, gBoard)
-        setTimeout(UnrevealNebs, 3000, elCellI, elCellJ, gBoard)
+        setTimeout(UnrevealNebs, 2000, elCellI, elCellJ, gBoard)
         return
     }
     /**** if its the first turn *****/
@@ -59,7 +55,7 @@ function onCellClicked(elCell) {
         gGame.isOn = true
         /***** the game starts  *****/
     }
-
+    gUserMoves.push({ i: elCellI, j: elCellJ })
     var currCell = gBoard[elCellI][elCellJ]
     if (currCell.isFlag) return
     if (currCell.isBomb) {
@@ -70,18 +66,14 @@ function onCellClicked(elCell) {
         if (gLives === 0) gameOver()
     }
 
-    console.log('gGame.shownCount: ', gGame.shownCount)
-    console.log('gEmptyCount: ', gEmptyCount)
     if (currCell.nebsCount < 1) {
         if (currCell.isHiden) gGame.shownCount++
-        console.log('gGame.shownCount++: ', gGame.shownCount)
         currCell.isHiden = false
         revealNebs(elCellI, elCellJ, gBoard)
         // return
     }
     if (currCell.nebsCount >= 1) {
         if (currCell.isHiden) gGame.shownCount++
-        console.log('gGame.shownCount++: ', gGame.shownCount)
         currCell.isHiden = false
         renderBoard(gBoard, '.board')
     }
@@ -98,14 +90,13 @@ function onChosenLevel(btn) {
 
 function gameOver() {
     clearInterval(gTimeInterval)
-    document.querySelector('.timer').innerText = `${gGame.timer}`
     revealBombs(gBoard)
     gLives = 3
-    document.querySelector('.modal').style.display = 'block'
     gGame.isOn = false
-    console.log(gBoard)
-    document.querySelector('.live').innerText = 'live left: ' + gLives
     gGameOver = true
+    document.querySelector('.modal').style.display = 'block'
+    document.querySelector('.timer').innerText = `${gGame.timer}`
+    document.querySelector('.live').innerText = 'live left: ' + gLives
     document.querySelector('.smile-img').src = "pics/sad.jpg"
 }
 
@@ -116,19 +107,22 @@ function timer() {
 
 function restart() {
     clearInterval(gTimeInterval)
-    gGame.timer = 0
-    document.querySelector('.timer').innerText = `${gGame.timer}`
-    gGame.isOn = false
     gBoard = createCleanBoard(gLevel)
     renderEmptyBoard(gBoard)
-    document.querySelector('.modal').style.display = 'none'
-    document.querySelector('.live').innerText = 'live left: ' + gLives
+    gGame.timer = 0
+    gGame.isOn = false
     gGameOver = false
-    document.querySelector('.smile-img').src = "pics/smile.jpg"
     gGame.flagsCount = gLevel * 10
-    document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
     gGame.shownCount = 0
     gEmptyCount = 0
+    gSafeClicks = 3
+    gHintsCount = 3
+    document.querySelector('.modal').style.display = 'none'
+    document.querySelector('.live').innerText = 'live left: ' + gLives
+    document.querySelector('.smile-img').src = "pics/smile.jpg"
+    document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
+    document.querySelector('.sides.left.safe').innerText = 'SAFE CLICK: ' + gSafeClicks
+    document.querySelector('.timer').innerText = `${gGame.timer}`
 }
 
 function checkVictory(board) {
@@ -138,8 +132,8 @@ function checkVictory(board) {
         gBestTime = (gGame.timer < gBestTime) ? gGame.timer : gBestTime
         localStorage.removeItem("BestTime")
         localStorage.setItem("BestTime", gBestTime)
-        document.querySelector('.best').innerText = 'BEST TIME: '+localStorage.getItem("BestTime")
-        console.log('localStorage.getItem("BestTime"): ',localStorage.getItem("BestTime") )
+        document.querySelector('.best').innerText = 'BEST TIME: ' + localStorage.getItem("BestTime")
+        console.log('localStorage.getItem("BestTime"): ', localStorage.getItem("BestTime"))
         clearInterval(gTimeInterval)
     }
 
@@ -147,13 +141,39 @@ function checkVictory(board) {
 }
 
 function onHint(elHint) {
+    if (gHintsCount < 1) return
     if (elHint.dataset.on === 'false') {
         elHint.src = "pics/hint-on.jpg"
         gHintOn = true
+        gHintsCount--
         setTimeout(() => {
             gHintOn = false
             elHint.src = "pics/hint-off.jpg"
-        }, 3000)
+        }, 2000)
     }
 
+}
+function onSafeClick(elDiv) {
+    if (gSafeClicks < 1) return
+    var randCellI = getRandomIntInclusive(0, gBoard.length - 1)
+    var randCellj = getRandomIntInclusive(0, gBoard.length - 1)
+    if (!gBoard[randCellI][randCellj].isBomb) {
+        gBoard[randCellI][randCellj].isSafe = true
+        renderBoard(gBoard, '.board')
+        gSafeClicks--
+        elDiv.innerText = 'SAFE CLICK: ' + gSafeClicks
+        setTimeout(() => {
+            gBoard[randCellI][randCellj].isSafe = false
+            renderBoard(gBoard, '.board')
+        }, 3000)
+    } else onSafeClick(gBoard)
+}
+
+function onUndo() {
+    gUserMoves.pop()
+
+}
+
+function onDarkMode(){
+    document.querySelector('body').classList.toggle('dark-mode')
 }
