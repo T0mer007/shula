@@ -180,7 +180,7 @@ table {
     margin-left: 380px;
     width: 160px;
     height: 70px;
-    background: #c7b43790;
+    background: #c7b43731;
     border-radius: 50%;
     padding-top: 15px;
     padding-left: 20px;
@@ -188,23 +188,28 @@ table {
 }
 .live {
     margin-top: 40px;
-    
+    background-color: #edda87be;
+    color: #445a625c;
 }
 
 .flag{
+    background-color: #edda87be;
+    color: #df6350;
     padding-left: 33px;
    margin-top: 120px;
 }
 .hints{
+background-color: #edda87be;
 margin-top: 200px;
 padding: 14px 7px;
 
 
 }
-.bomb{
+.mega-hint{
     padding-top: 20px;
     cursor: pointer;
     margin-top: 280px;
+    background-color: #edda87be;
 }
 
 .hint{
@@ -219,21 +224,27 @@ padding: 14px 7px;
 }
 .best{
     margin-top: 85px;
+    background-color: #edda87b3;
+    color: #445a625c;
 }
 .safe{
     margin-top: 163px;
     cursor: pointer;
-    color: #539bbd95;
+    /* color: #92c5d195; */
+    background: #cadcea8f;
+    color: #445a625c;
 }
 .undo{
     margin-top: 242px;
-    padding-top: 20px;
-    padding-left: 52px;
+    padding-top: 16px;
+    padding-left: 62px;
     cursor: pointer;
+    background: #eaa538e4;
+    
 }
 
 .dark-mode{
-    background-color: #676b599a;
+    background-color: #1d1d1ca3;
 }
 .dark-btn{
     background: #6d8a5f;

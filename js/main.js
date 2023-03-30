@@ -18,7 +18,11 @@ var gHintOn = false
 var gBestTime = Infinity
 var gSafeClicks = 3
 var gHintsCount = 3
-const gUserMoves = []
+var gUndoIsON = false
+var gUserMoves = []
+var gMegaHint = false
+var gMegaSpots = []
+var gMegaCount = 2
 function onInit() {
     gBoard = createCleanBoard(2)
     renderEmptyBoard(gBoard)
@@ -37,11 +41,12 @@ function onRightClicked(elCell) {
     document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
     renderBoard(gBoard, '.board')
 }
-function onCellClicked(elCell, cellI, cellJ) {
+function onCellClicked(elCell) {
     if (gGameOver) return
     const elCellI = +elCell.dataset.i
     const elCellJ = +elCell.dataset.j
     if (gHintOn) {
+        gHintOn = false
         revealNebsHint(elCellI, elCellJ, gBoard)
         setTimeout(UnrevealNebs, 2000, elCellI, elCellJ, gBoard)
         return
@@ -55,13 +60,25 @@ function onCellClicked(elCell, cellI, cellJ) {
         gGame.isOn = true
         /***** the game starts  *****/
     }
-    gUserMoves.push({ i: elCellI, j: elCellJ })
+    if (gMegaHint) {
+        if (gMegaCount >= 0) {
+            gMegaSpots.push(gBoard[elCellI][elCellJ])
+            gMegaCount--
+            if (gMegaCount === 0) {
+                revealMegaHint(gMegaSpots[0].location, gMegaSpots[1].location, gBoard)
+                setTimeout(UnRevealMegaHint, 3000, gMegaSpots[0].location, gMegaSpots[1].location, gBoard)
+                gMegaHint = false
+            }
+        }
+        return
+    }
+    if (!gUndoIsON) gUserMoves.push(elCell)
     var currCell = gBoard[elCellI][elCellJ]
     if (currCell.isFlag) return
     if (currCell.isBomb) {
         currCell.isHiden = false
-        renderBoard(gBoard, '.board')
         gLives--
+        renderBoard(gBoard, '.board')
         document.querySelector('.live').innerText = 'live left: ' + gLives
         if (gLives === 0) gameOver()
     }
@@ -70,7 +87,7 @@ function onCellClicked(elCell, cellI, cellJ) {
         if (currCell.isHiden) gGame.shownCount++
         currCell.isHiden = false
         revealNebs(elCellI, elCellJ, gBoard)
-        // return
+
     }
     if (currCell.nebsCount >= 1) {
         if (currCell.isHiden) gGame.shownCount++
@@ -115,8 +132,16 @@ function restart() {
     gGame.flagsCount = gLevel * 10
     gGame.shownCount = 0
     gEmptyCount = 0
+    gLives = 3
     gSafeClicks = 3
     gHintsCount = 3
+    gUserMoves = []
+    gUndoIsON = false
+    gMegaHint = false
+    gMegaSpots = []
+    gMegaCount = 2
+    document.querySelector('.mega-hint').classList.remove('dark-mode')
+    document.querySelector('.hints').classList.remove('dark-mode')
     document.querySelector('.modal').style.display = 'none'
     document.querySelector('.live').innerText = 'live left: ' + gLives
     document.querySelector('.smile-img').src = "pics/smile.jpg"
@@ -133,7 +158,6 @@ function checkVictory(board) {
         localStorage.removeItem("BestTime")
         localStorage.setItem("BestTime", gBestTime)
         document.querySelector('.best').innerText = 'BEST TIME: ' + localStorage.getItem("BestTime")
-        console.log('localStorage.getItem("BestTime"): ', localStorage.getItem("BestTime"))
         clearInterval(gTimeInterval)
     }
 
@@ -141,7 +165,10 @@ function checkVictory(board) {
 }
 
 function onHint(elHint) {
-    if (gHintsCount < 1) return
+    if (gHintsCount < 1) {
+        document.querySelector('.hints').classList.add('dark-mode')
+        return
+    }
     if (elHint.dataset.on === 'false') {
         elHint.src = "pics/hint-on.jpg"
         gHintOn = true
@@ -171,9 +198,29 @@ function onSafeClick(elDiv) {
 
 function onUndo() {
     gUserMoves.pop()
-
+    gUndoIsON = true
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            gBoard[i][j].isHiden = true
+        }
+    }
+    if (gUserMoves.length < 1) return
+    for (var k = 0; k < gUserMoves.length; k++) {
+        onCellClicked(gUserMoves[k])
+    }
+    renderBoard(gBoard, '.board')
+    gUndoIsON = false
 }
 
-function onDarkMode(){
+function onDarkMode() {
     document.querySelector('body').classList.toggle('dark-mode')
 }
+
+function onMegaHint() {
+    if (gMegaSpots.length > 0) return
+    gMegaHint = true
+    document.querySelector('.mega-hint').classList.add('dark-mode')
+
+}
+
+

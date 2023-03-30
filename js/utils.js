@@ -1,26 +1,5 @@
 'use strict'
 
-function createCleanBoard(level) {
-    var size = 8
-    switch (level) {
-        case 1:
-            size = 4
-            break
-        case 2:
-            size = 8
-            break
-        case 3:
-            size = 12
-    }
-    var board = []
-    for (var i = 0; i < size; i++) {
-        board.push([])
-        for (var j = 0; j < size; j++) {
-            board[i][j] = { isFlag: false, char: ' ', isHiden: true }
-        }
-    }
-    return board
-}
 
 function createGameBoard(level, elCellI, elCellJ) {
     var size
@@ -40,7 +19,7 @@ function createGameBoard(level, elCellI, elCellJ) {
         case 3:
             size = 12
             bombs = 25
-            difficulty = 0.25
+            difficulty = 0.15
     }
     const board = []
     for (var i = 0; i < size; i++) {
@@ -136,33 +115,47 @@ function countBombsNeighbors(cellI, cellJ, mat) {
     return neighborsCount
 }
 
-//random num inclusive
+function createCleanBoard(level) {
+    var size = 8
+    switch (level) {
+        case 1:
+            size = 4
+            break
+        case 2:
+            size = 8
+            break
+        case 3:
+            size = 12
+    }
+    var board = []
+    for (var i = 0; i < size; i++) {
+        board.push([])
+        for (var j = 0; j < size; j++) {
+            board[i][j] = { isFlag: false, char: ' ', isHiden: true }
+        }
+    }
+    return board
+}
 
 function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 function revealNebs(cellI, cellJ, mat) {
-
-    if (mat[cellI][cellJ].nebsCount > 0) return
     if (mat[cellI][cellJ].isBomb) return
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= mat.length) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            // if (i === cellI && j === cellJ) continue
             if (j < 0 || j >= mat[i].length) continue
+            if (i === cellI && j === cellJ) continue
             if (!mat[i][j].isBomb) {
                 var currCell = mat[i][j]
                 if (currCell.isHiden) {
-
                     currCell.isHiden = false
                     gGame.shownCount++
-                }
-                renderBoard(gBoard, '.board')
-                if (gBoard[i][j].nebsCount === 0) {
-                    // console.log('mat[cellI][cellJ]: ', mat[cellI][cellJ])
-                    // console.log('currCell.location.i, currCell.location.j: ', currCell.location.i, currCell.location.j)
-                    // revealNebs(currCell.location.i, currCell.location.j, mat)
+                    if (currCell.nebsCount == 0) {
+                        revealNebs(i, j, gBoard)
+                    }
                 }
             }
         }
@@ -206,4 +199,29 @@ function UnrevealNebs(cellI, cellJ, mat) {
     renderBoard(gBoard, '.board')
 }
 
+function revealMegaHint(location1, location2, mat) {
 
+    for (var i = location1.i; i <= location2.i; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = location1.j; j <= location2.j; j++) {
+            if (j < 0 || j >= mat[i].length) continue
+            var currCell = mat[i][j]
+            if (currCell.isHiden) currCell.isHiden = false
+            else (currCell.isRevealed = true)
+        }
+    }
+    renderBoard(gBoard, '.board')
+}
+
+function UnRevealMegaHint(location1, location2, mat) {
+
+    for (var i = location1.i; i <= location2.i + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = location1.j; j <= location2.j + 1; j++) {
+            if (j < 0 || j >= mat[i].length) continue
+            var currCell = mat[i][j]
+            if (!currCell.isRevealed) currCell.isHiden = true
+        }
+    }
+    renderBoard(gBoard, '.board')
+}
