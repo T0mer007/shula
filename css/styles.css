@@ -155,7 +155,7 @@ table {
     position: absolute;
     z-index: 1;
     margin-top: 70px;
-    margin-left: 550px;
+    margin-left: 670px;
     opacity: 0.8;
     display: none;
     font-size: large;
@@ -181,7 +181,7 @@ table {
     font-family: fantasy;
     font-weight: 100;
     position: absolute;
-    margin-left: 380px;
+    margin-left: 450px;
     width: 160px;
     height: 70px;
     background: #c7b43731;
@@ -194,12 +194,13 @@ table {
 .live {
     margin-top: 40px;
     background-color: #edda87be;
-    color: #445a625c;
+    color: #1ea4d5d0;
+    padding-left: 35px;
 }
 
 .flag {
     background-color: #edda87be;
-    color: #df6350;
+    color: #da533e;
     padding-left: 33px;
     margin-top: 120px;
 }
@@ -216,7 +217,7 @@ table {
     padding-top: 18px;
     cursor: pointer;
     margin-top: 280px;
-    color: #445a625c;
+    color: #5a590d7f;
     padding-left: 28px;
     background-color: #edda87be;
 }
@@ -229,14 +230,14 @@ table {
 }
 
 .left {
-    margin-left: 100px;
+    margin-left: 300px;
 
 }
 
 .best {
     margin-top: 85px;
     background-color: #edda87b3;
-    color: #445a625c;
+    color: #afa357f7;
 }
 
 .safe {
@@ -271,9 +272,17 @@ table {
 
 .exterminator {
     margin-top: 410px;
-    color: #b178d2;
+    color: #b78bd1eb;
     background-color: #edda8786;
     font-size: large;
     padding-top: 20px;
+    cursor: pointer;
+}
+
+.bomb-mode {
+    margin-top: 360px;
+    padding-top: 18px;
+    background-color: #edda87be;
+    color: #262424cd;
     cursor: pointer;
 }

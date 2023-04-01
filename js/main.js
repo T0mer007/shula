@@ -13,17 +13,21 @@ const gGame = {
 }
 var gEmptyCount = 0
 var gLives = 3
-var gGameOver = false
+var gGameisOver = false
 var gHintOn = false
 var gBestTime = Infinity
 var gSafeClicks = 3
 var gHintsCount = 3
-var gUndoIsON = false
 var gUserMoves = []
 var gMegaHint = false
 var gMegaSpots = []
 var gMegaCount = 2
 var gBombsExterminated = 0
+var gBombsOnMode
+var gBombModeIsOn = false
+
+
+
 function onInit() {
     gBoard = createCleanBoard(2)
     renderEmptyBoard(gBoard)
@@ -33,6 +37,7 @@ function onInit() {
 
 function onRightClicked(elCell) {
     if (gGame.flagsCount < 1) return
+    if (gGameisOver) return
     const elCellI = +elCell.dataset.i
     const elCellJ = +elCell.dataset.j
     const currCell = gBoard[elCellI][elCellJ]
@@ -43,9 +48,22 @@ function onRightClicked(elCell) {
     renderBoard(gBoard, '.board')
 }
 function onCellClicked(elCell) {
-    if (gGameOver) return
     const elCellI = +elCell.dataset.i
     const elCellJ = +elCell.dataset.j
+    if (gGameisOver) return
+    if (gBombModeIsOn) {
+        gBoard[elCellI][elCellJ].isBomb = true
+        gBoard[elCellI][elCellJ].isHiden = false
+        gBombsOnMode--
+        console.log('gBombsOnMode: ', gBombsOnMode)
+        renderBoard(gBoard, '.board')
+        if (gBombsOnMode < 1) {
+            hideAllBoard(gBoard)
+            gBombModeIsOn = false
+            console.log(gBombModeIsOn);
+        }
+        return
+    }
     if (gHintOn) {
         gHintOn = false
         revealNebsHint(elCellI, elCellJ, gBoard)
@@ -73,7 +91,7 @@ function onCellClicked(elCell) {
         }
         return
     }
-    if (!gUndoIsON) gUserMoves.push(elCell)
+    gUserMoves.push(elCell)
     var currCell = gBoard[elCellI][elCellJ]
     if (currCell.isFlag) return
     if (currCell.isBomb) {
@@ -83,12 +101,14 @@ function onCellClicked(elCell) {
         renderBoard(gBoard, '.board')
         var audioBomb = new Audio('./sounds/bomb.mp3')
         audioBomb.play()
-        document.querySelector('.live').innerText = 'live left: ' + gLives
+        document.querySelector('.live').innerText = '😇: ' + gLives
+
         if (gLives === 0) gameOver()
     }
 
     if (currCell.nebsCount < 1) {
         if (currCell.isHiden) gGame.shownCount++
+
         currCell.isHiden = false
         revealNebs(elCellI, elCellJ, gBoard)
     }
@@ -113,12 +133,12 @@ function gameOver() {
     revealBombs(gBoard)
     gLives = 3
     gGame.isOn = false
-    gGameOver = true
+    gGameisOver = true
     var audio = new Audio('./sounds/game-over.wav')
     audio.play()
     document.querySelector('.modal').style.display = 'block'
     document.querySelector('.timer').innerText = `${gGame.timer}`
-    document.querySelector('.live').innerText = 'live left: ' + gLives
+    document.querySelector('.live').innerText = '😇: ' + gLives
     document.querySelector('.smile-img').src = "pics/sad.jpg"
 }
 
@@ -133,7 +153,7 @@ function restart() {
     renderEmptyBoard(gBoard)
     gGame.timer = 0
     gGame.isOn = false
-    gGameOver = false
+    gGameisOver = false
     gGame.flagsCount = gLevel * 10
     gGame.shownCount = 0
     gEmptyCount = 0
@@ -141,7 +161,6 @@ function restart() {
     gSafeClicks = 3
     gHintsCount = 3
     gUserMoves = []
-    gUndoIsON = false
     gMegaHint = false
     gMegaSpots = []
     gMegaCount = 2
@@ -150,7 +169,7 @@ function restart() {
     document.querySelector('.mega-hint').classList.remove('dark-mode')
     document.querySelector('.hints').classList.remove('dark-mode')
     document.querySelector('.modal').style.display = 'none'
-    document.querySelector('.live').innerText = 'live left: ' + gLives
+    document.querySelector('.live').innerText = '😇: ' + gLives
     document.querySelector('.smile-img').src = "pics/smile.jpg"
     document.querySelector('.flag').innerText = '🚩: ' + gGame.flagsCount
     document.querySelector('.sides.left.safe').innerText = 'SAFE CLICK: ' + gSafeClicks
@@ -168,6 +187,7 @@ function checkVictory(board) {
         clearInterval(gTimeInterval)
         var audio = new Audio('./sounds/win.wav')
         audio.play()
+        gGameisOver = true
     }
 
 
@@ -206,19 +226,23 @@ function onSafeClick(elDiv) {
 }
 
 function onUndo() {
+    const elCellI = + gUserMoves[gUserMoves.length - 1].dataset.i
+    const elCellJ = + gUserMoves[gUserMoves.length - 1].dataset.j
+    console.log('gBoard[elCellI][elCellJ]: ', gBoard[elCellI][elCellJ])
+    if (gBoard[elCellI][elCellJ].isBomb) {
+        gLives++
+        document.querySelector('.live').innerText = '😇: ' + gLives
+        gBoard[elCellI][elCellJ].isHiden = true
+        renderBoard(gBoard, '.board')
+    } else if (gBoard[elCellI][elCellJ].nebsCount === 0) {
+
+        undoRevealNebs(elCellI, elCellJ, gBoard)
+    } else {
+        gBoard[elCellI][elCellJ].isHiden = true
+        gGame.shownCount--
+        renderBoard(gBoard, '.board')
+    }
     gUserMoves.pop()
-    gUndoIsON = true
-    for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard.length; j++) {
-            gBoard[i][j].isHiden = true
-        }
-    }
-    if (gUserMoves.length < 1) return
-    for (var k = 0; k < gUserMoves.length; k++) {
-        onCellClicked(gUserMoves[k])
-    }
-    renderBoard(gBoard, '.board')
-    gUndoIsON = false
 }
 
 function onDarkMode() {
@@ -233,7 +257,7 @@ function onMegaHint() {
 }
 
 function onBombExterminator(elDiv) {
-    for (var i = 0; i < 500; i++) {
+    for (var i = 0; i < 300; i++) {
         if (gBombsExterminated > 3) {
             elDiv.innerText = 'Exterminator 💥'
             return
@@ -244,6 +268,22 @@ function onBombExterminator(elDiv) {
             gBoard[randCellI][randCellj].isBomb = false
             gBombsExterminated++
             renderBoard(gBoard, '.board')
-        } else onBombExterminator(elDiv)
+        }
     }
+}
+
+function onBombMode() {
+
+    restart()
+    switch (gLevel) {
+        case 1:
+            gBombsOnMode = 3
+            break
+        case 2:
+            gBombsOnMode = 8
+            break
+        case 3:
+            gBombsOnMode = 15
+    }
+    gBombModeIsOn = true
 }

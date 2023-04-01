@@ -225,3 +225,34 @@ function UnRevealMegaHint(location1, location2, mat) {
     }
     renderBoard(gBoard, '.board')
 }
+
+function undoRevealNebs(cellI, cellJ, mat) {
+    if (mat[cellI][cellJ].isBomb) return
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (j < 0 || j >= mat[i].length) continue
+            if (!mat[i][j].isBomb) {
+                var currCell = mat[i][j]
+                if (!currCell.isHiden) {
+                    currCell.isHiden = true
+                    gGame.shownCount--
+                    if (currCell.nebsCount === 0) {
+                        undoRevealNebs(i, j, gBoard)
+                    }
+                }
+            }
+        }
+    }
+    renderBoard(gBoard, '.board')
+}
+
+function hideAllBoard(mat) {
+    for (var i = 0; i <= mat.length - 1; i++) {
+        for (var j = 0; j <= mat.length - 1; j++) {
+            if (mat[i][j].isHiden === false) {
+                mat[i][j].isHiden = true
+            }
+        }
+    }
+}        
