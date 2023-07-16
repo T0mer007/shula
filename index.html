@@ -11,25 +11,47 @@
 
 <body onload="onInit()">
     <div class="header">
-        <div class="sides left best">BEST TIME:</div><div onclick="onSafeClick(this)" class="sides left safe">SAFE CLICK: </div><div onclick="onUndo()" class="sides left undo"> 🔙</div><div onclick="onDarkMode()" class="sides left dark-btn">Dark Mode</div><div onclick="onBombExterminator(this)" class="sides left exterminator">Exterminator 💣</div>
-        <div class="featurs">
-            
-            <h3 class="center">Shula</h3>
-            <div class="restart">
-                <img onclick="restart()" class="smile-img" src="pics/smile.jpg" alt="">
-                <h3 class="sides live">😇: 3</h3><h3 class="sides flag"></h3><div class="sides hints"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"><img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg"></div>
-                <div onclick="onMegaHint()" class="sides mega-hint">MEGA-HINT</div>
-                <div onclick="onBombMode()" class="sides bomb-mode">Bomb-Mode</div>
-            </div>
-            <img class="clock-img" src="pics/clock.jpg">
-            <h3 class="timer"></h3>
+        <div class="level-btns">
+            <button class="btn" data-level=1 onclick="onChosenLevel(this)">Rookie</button>
+            <button class="btn" data-level=2 onclick="onChosenLevel(this)">Medium</button>
+            <button class="btn" data-level=3 onclick="onChosenLevel(this)">Extreme!</button>
         </div>
-        <button class="btn" data-level=1 onclick="onChosenLevel(this)">Rookie</button>
-        <button class="btn" data-level=2 onclick="onChosenLevel(this)">Medium</button>
-        <button class="btn" data-level=3 onclick="onChosenLevel(this)">Extreme!</button>
+        <div class="restart">
+            <img onclick="restart()" class="smile-img" src="pics/smile.jpg" alt="">
+            <h3 class="">Shula</h3>
+            <h3 class="timer"></h3>
+            <img class="clock-img" src="pics/clock.jpg">
+        </div>
     </div>
-    <div class="modal"><h3 class="modal-txt">TRY AGAIN!</h3><img class="res-img" onclick="restart()" src="pics/restart.png" ></div><div class="board"><span> GAME OVER! </span></div>
+<section class="main-content">
 
+    <section class="left-menu">
+        <div class="sides left best">BEST TIME:</div>
+        <div onclick="onSafeClick(this)" class="sides left safe">SAFE CLICK: </div>
+        <div onclick="onUndo()" class="sides left undo"> 🔙</div>
+        <div onclick="onDarkMode()" class="sides left dark-btn">Dark Mode</div>
+        <div onclick="onBombExterminator(this)" class="sides left exterminator">Exterminator 💣</div>
+    </section>
+    
+    <div class="right-menu">
+        <h3 class="sides live">😇 : 3</h3>
+        <h3 class="sides flag"></h3>
+        <div onclick="onMegaHint()" class="sides mega-hint">MEGA-HINT</div>
+        <div onclick="onBombMode()" class="sides bomb-mode">Bomb-Mode</div>
+        <div class="sides hints">
+            <img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg">
+            <img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg">
+            <img data-On=false class="hint" onclick="onHint(this)" src="pics/hint-off.jpg">
+        </div>
+    </div>
+
+
+    <div class="modal">
+        <h3 class="modal-txt">TRY AGAIN!</h3><img class="res-img" onclick="restart()" src="pics/restart.png">
+    </div>
+    <div class="board"><span> GAME OVER! </span></div>
+    
+</section>
     <div class="footer"><span>©️ CoffeRights: Tomer Benaim</span></div>
     <script src="js/main.js"></script>
     <script src="js/utils.js"></script>

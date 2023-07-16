@@ -12,15 +12,88 @@ body {
 }
 
 .header {
+    display: flex;
     height: 70px;
     background: #316019b9;
-    padding-top: 20px;
-    font-size: x-large;
+    padding-block: 10px;
+    font-size: 1.5rem;
+    padding-inline: 10px;
+    gap: 20%;
+    width: 100%;
+}
+
+h3 {
+    margin: 0;
+}
+
+.level-btns {
+    display: flex;
+    width: 250px;
+}
+
+.restart {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    width: 210px;
+    cursor: pointer;
+    justify-self: center;
+}
+
+.clock-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.smile-img {
+    cursor: pointer;
+    height: 45px;
+    border-radius: 50%;
 }
 
 
+.timer {
+    line-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.center {
+    width: 200px;
+}
+
+.main-content {
+    display: grid;
+    width: 100%;
+    max-width: 900px;
+    grid-template-columns: 170px 1fr 170px;
+    grid-template-rows: 1fr;
+    padding-block: 25px;
+    padding-inline: 25px;
+    margin: auto;
+
+}
+
+.left-menu {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 30px;
+}
+
+.right-menu {
+    padding-top: 30px;
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
 .board {
+    grid-column: 2;
+    grid-row: 1;
     padding: 30px;
 }
 
@@ -28,7 +101,7 @@ table {
     text-align: center;
     margin: 0px auto;
     color: rgb(17, 94, 25);
-    font-size: large;
+    font-size: 1.2rem;
     table-layout: fixed;
 }
 
@@ -94,57 +167,12 @@ table {
     color: #fff;
 }
 
-.clock-img {
-    width: 45px;
-    border-radius: 50%;
-    position: absolute;
-}
 
-.restart {
-
-    margin-left: 50px;
-    width: 45px;
-    position: absolute;
-    cursor: pointer;
-}
-
-.smile-img {
-    margin-left: 140px;
-    cursor: pointer;
-    height: 45px;
-    border-radius: 50%;
-
-
-}
-
-.featurs {
-    position: absolute;
-    display: inline-block;
-    margin-left: 40%;
-}
-
-.timer {
-
-    position: absolute;
-    margin-top: 5px;
-    margin-left: 59px;
-
-}
-
-.center {
-
-    position: absolute;
-    margin-left: 100px;
-    margin-top: 5px;
-    width: 200px;
-}
 
 .footer {
-
-    margin-top: 0px;
+    margin-block: 20px;
     text-align: center;
-    font-size: x-large;
-
+    font-size: 1.5rem;
 }
 
 .modal {
@@ -152,14 +180,17 @@ table {
     height: 150px;
     border-radius: 20%;
     background-color: #efecc9;
-    position: absolute;
     z-index: 1;
+    position: absolute;
     margin-top: 70px;
-    margin-left: 670px;
+    margin-left: 30%;
     opacity: 0.8;
     display: none;
-    font-size: large;
+    font-size: 1.2rem;
     color: #3b5413;
+    padding-top: 30px;
+    /* grid-row: 1;
+    grid-column: 2; */
 }
 
 .res-img {
@@ -177,22 +208,18 @@ table {
 }
 
 .sides {
-
+    display: flex;
     font-family: fantasy;
     font-weight: 100;
-    position: absolute;
-    margin-left: 450px;
     width: 160px;
-    height: 70px;
+    height: max-content;
     background: #c7b43731;
-    border-radius: 50%;
-    padding-top: 15px;
+    border-radius: 1rem;
+    padding-block: 10px;
     padding-left: 20px;
-    cursor: default;
 }
 
 .live {
-    margin-top: 40px;
     background-color: #edda87be;
     color: #1ea4d5d0;
     padding-left: 35px;
@@ -202,21 +229,16 @@ table {
     background-color: #edda87be;
     color: #da533e;
     padding-left: 33px;
-    margin-top: 120px;
 }
 
 .hints {
     background-color: #edda87be;
-    margin-top: 200px;
     padding: 14px 7px;
-
-
 }
 
 .mega-hint {
     padding-top: 18px;
     cursor: pointer;
-    margin-top: 280px;
     color: #5a590d7f;
     padding-left: 28px;
     background-color: #edda87be;
@@ -229,27 +251,19 @@ table {
     cursor: pointer;
 }
 
-.left {
-    margin-left: 300px;
-
-}
 
 .best {
-    margin-top: 85px;
     background-color: #edda87b3;
     color: #afa357f7;
 }
 
 .safe {
-    margin-top: 163px;
     cursor: pointer;
-    /* color: #92c5d195; */
     background: #cadcea8f;
     color: #445a625c;
 }
 
 .undo {
-    margin-top: 242px;
     padding-top: 16px;
     padding-left: 62px;
     cursor: pointer;
@@ -267,22 +281,84 @@ table {
     cursor: pointer;
     padding-top: 20px;
     padding-left: 30px;
-    margin-top: 322px;
 }
 
 .exterminator {
-    margin-top: 410px;
     color: #b78bd1eb;
     background-color: #edda8786;
-    font-size: large;
+    font-size: 1.2rem;
     padding-top: 20px;
     cursor: pointer;
 }
 
 .bomb-mode {
-    margin-top: 360px;
     padding-top: 18px;
     background-color: #edda87be;
     color: #262424cd;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+    .header {
+        gap: 10px;
+        padding-inline: 5px;
+    }
+
+    .main-content {
+        grid-template-columns: 120px 1fr;
+        padding-inline: 10px;
+    }
+
+    .right-menu {
+        width: 120px;
+        grid-column: 1;
+        grid-row: 1;
+        margin-top: 230%;
+    }
+
+    .left-menu {
+        grid-column: 1;
+        grid-row: 1;
+        width: 120px;
+    }
+
+    .sides {
+        width: 120px;
+        padding-inline: 5px;
+        padding-top: 9px;
+    }
+    .exterminator{
+        font-size: 0.9rem;
+    }
+
+    .live,
+    .flag,
+    .undo {
+        padding-left: 32px;
+    }
+
+    .hints {
+        padding: 0;
+        padding-block: 5px;
+    }
+
+    .hint {
+        width: 25px;
+    }
+
+    .btn{
+        font-size: 0.7rem;
+    }
+    .clock-img {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .smile-img {
+        cursor: pointer;
+        height: 25px;
+        }
+        h3{
+            font-size: 0.9rem;
+        }
 }
